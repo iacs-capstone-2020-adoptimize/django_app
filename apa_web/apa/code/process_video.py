@@ -28,19 +28,18 @@ def get_head_distance(head_pixels, frame_shape):
 
 def get_features_video(filename, sample_rate=10, return_frames=False):
     video = CatVideo(filename)
-    return get_features_frame_list(video.iter_all_frames(),
-                                   sample_rate=sample_rate,
-                                   return_frames=return_frames)
+    return get_features_frames(video.iter_all_frames(),
+                               sample_rate=sample_rate,
+                               return_frames=return_frames)
 
 
-def get_features_frame_list(frames, sample_rate=10, return_frames=False):
+def get_features_frames(frames, sample_rate=10, return_frames=False):
     cat_frames = list()
     frame_list = list()
     image_data = list()
     for i, frame in enumerate(frames):
         if i % sample_rate == 0:
             features = get_features_frame(frame)
-            print(i)
             if np.any(features[3:9] != 0):
                 cat_frames.append(features)
                 frame_list.append(i)
