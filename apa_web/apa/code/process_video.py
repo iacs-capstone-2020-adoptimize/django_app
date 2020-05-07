@@ -7,9 +7,10 @@ from .yolo_training.Detector import detect_raw_image
 import csv
 import cpbd
 
-
-log_params = np.loadtxt("regression_parameter_results/log_params_any_features_v1.txt")
-log_params_2 = np.loadtxt("regression_parameter_results/log_params_all_features_v1.txt")
+import os
+file_dir = os.path.dirname(__file__)  # Directory of this file
+log_params = np.loadtxt(os.path.join(file_dir, "regression_parameter_results/log_params_any_features_v1.txt"))
+log_params_2 = np.loadtxt(os.path.join(file_dir, "regression_parameter_results/log_params_all_features_v1.txt"))
 
 
 def sharpness_score(gray_img):
@@ -27,12 +28,19 @@ def get_head_distance(head_pixels, frame_shape):
 
 def get_features_video(filename, sample_rate=10, return_frames=False):
     video = CatVideo(filename)
+    return get_features_frame_list(video.iter_all_frames(),
+                                   sample_rate=sample_rate,
+                                   return_frames=return_frames)
+
+
+def get_features_frame_list(frames, sample_rate=10, return_frames=False):
     cat_frames = list()
     frame_list = list()
     image_data = list()
-    for i, frame in enumerate(video.iter_all_frames()):
+    for i, frame in enumerate(frames):
         if i % sample_rate == 0:
             features = get_features_frame(frame)
+            print(i)
             if np.any(features[3:9] != 0):
                 cat_frames.append(features)
                 frame_list.append(i)
@@ -147,11 +155,3 @@ def create_data_for_model(file_name):
         x_values.append(get_features_frame(frame))
 
     return np.array(x_values), np.array(y_values)
-
-
-if __name__ == "__main__":
-    for i in range(1, 80):
-        filename = "data/videos/cat{}.mp4".format(i)
-        features = get_features_video(filename)
-        np.save("data/video_features/cat{}".format(i), features)
-        print(i)

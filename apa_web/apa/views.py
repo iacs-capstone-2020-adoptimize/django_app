@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 import cv2
-from .model_code import *
+# from .model_code import *
+from .code.process_video import get_features_frame_list, score_video_log_2
 import numpy as np
 
 def index(request):
@@ -31,21 +32,23 @@ def load_video(file):
     return frames
 
 def run_model(frames):
-    feats = get_features_video(frames)
-    print(feats)
-    #frame_idx = score_video_log2(feats)
-    frame_idx = 0
-    return frames[frame_idx]
+    features = get_features_frame_list(frames)
+    return frames[score_video_log_2(features)]
+    # feats = get_features_video(frames)
+    # print(feats)
+    # #frame_idx = score_video_log2(feats)
+    # frame_idx = 0
+    # return frames[frame_idx]
 
-def get_features_video(frames, sample_rate=10):
-    cat_frames = list()
-    frame_list = list()
-    for i, frame in enumerate(frames):
-        if i % sample_rate == 0:
-            # features = get_features_frame(frame)
-            features = np.array([0.5,0.5,0.5,1,1,1,1,1,1,20,8])
-            if np.any(features[3:9] != 0):
-                cat_frames.append(features)
-                frame_list.append(i)
-    frame_list = np.array(frame_list).reshape((-1, 1))
-    return np.hstack((cat_frames, frame_list))
+# def get_features_video(frames, sample_rate=10):
+#     cat_frames = list()
+#     frame_list = list()
+#     for i, frame in enumerate(frames):
+#         if i % sample_rate == 0:
+#             # features = get_features_frame(frame)
+#             features = np.array([0.5,0.5,0.5,1,1,1,1,1,1,20,8])
+#             if np.any(features[3:9] != 0):
+#                 cat_frames.append(features)
+#                 frame_list.append(i)
+#     frame_list = np.array(frame_list).reshape((-1, 1))
+#     return np.hstack((cat_frames, frame_list))
