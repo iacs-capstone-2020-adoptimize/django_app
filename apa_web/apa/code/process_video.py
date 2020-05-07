@@ -40,15 +40,23 @@ def get_features_frames(frames, sample_rate=10, return_frames=False):
     for i, frame in enumerate(frames):
         if i % sample_rate == 0:
             features = get_features_frame(frame)
-            if np.any(features[3:9] != 0):
-                cat_frames.append(features)
-                frame_list.append(i)
+            cat_frames.append(features)
+            frame_list.append(i)
             image_data.append(frame)
+    image_data = np.array(image_data)
+    cat_frames = np.array(cat_frames).reshape((-1, 11))
     frame_list = np.array(frame_list).reshape((-1, 1))
-    if return_frames:
-        return np.hstack((cat_frames, frame_list)), image_data
+    cat_frames = np.hstack((cat_frames, frame_list))
+    detected_features = np.any(cat_frames[:, 3:9] != 0, axis=1)
+    if np.sum(detected_features) > 0:
+        if return_frames:
+            return cat_frames[detected_features], image_data[detected_features]
+        else:
+            return cat_frames[detected_features]
+    elif return_frames:
+        return cat_frames, image_data
     else:
-        return np.hstack((cat_frames, frame_list))
+        return cat_frames
 
 
 def get_features_frame(frame):
