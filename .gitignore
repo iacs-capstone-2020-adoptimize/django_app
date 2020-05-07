@@ -1,6 +1,5 @@
 notebooks/.ipynb_checkpoints/*
 *.checkpoint.ipynb
-*.h5
 .DS_Store
 .idea
 __pycache__
