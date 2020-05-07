@@ -1,4 +1,0 @@
-cat_eye
-cat_nose
-cat_ear
-cat_head

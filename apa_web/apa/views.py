@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 import cv2
-# from .model_code import *
 from .code.process_video import get_features_frame_list, score_video_log_2
 import numpy as np
 
