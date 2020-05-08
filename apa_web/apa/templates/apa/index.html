@@ -1,10 +1,33 @@
 <!DOCTYPE html>
 <html>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-    function ShowDiv() {
-        document.getElementById("spinDiv").style.display = "";
-        document.getElementById("spinHeader").style.display = "";
-    }
+        function submitForm() {
+            $("#spinDiv").css("display", "");
+            $("#spinHeader").css("display", "");
+            var formData = new FormData($("#video_form")[0]);
+            $.ajax({
+                url: "/apa/process",
+                data: formData,
+                type: "POST",
+                contentType: false,
+                processData: false,
+                success: function(data, textStatus, jqXHR) {
+                    const key = data.key;
+                    pollForResult(key);
+                },
+            });
+        }
+        function pollForResult(key) {
+            $.get("/apa/process", {"key": key},
+                function(data, textStatus, jqXHR) {
+                    if (data["success"] !== 1) {
+                        setTimeout(function() {pollForResult(key)}, 3000);
+                    } else{
+                        window.location = "/apa/result?key=" + key;
+                    }
+            });
+        }
     </script>
     
     <head>
@@ -19,11 +42,11 @@
             <div class="row align-items-center">
                 <div class="col-sm">
                     <h3>Upload Video</h3>
-                    <form action="/apa/result" method="post" enctype="multipart/form-data">
+                    <form id="video_form" enctype="multipart/form-data">
                         {% csrf_token %}
                         <input type="file" name="filename" style="padding-left:120px;">
                         <br>
-                        <input type="submit" value="Upload Video" onclick="ShowDiv()">
+                        <input type="button" value="Upload Video" onClick="submitForm()">
                     </form>
                 </div>
             </div>
