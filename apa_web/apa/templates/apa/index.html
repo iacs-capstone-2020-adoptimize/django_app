@@ -5,6 +5,10 @@
         document.getElementById("spinDiv").style.display = "";
         document.getElementById("spinHeader").style.display = "";
     }
+    function ShowFilename() {
+        var doc = document.getElementById("upload");
+        document.getElementById("fname").innerHTML = doc.files.item(0).name;
+    };
     </script>
     
     <head>
@@ -21,16 +25,19 @@
                     <h3>Upload Video</h3>
                     <form action="/apa/result" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <input type="file" name="filename" style="padding-left:120px;">
-                        <br>
-                        <input type="submit" value="Upload Video" onclick="ShowDiv()">
+                        <div style="margin:0 auto; width:300px; height:200px; border:2px dashed #338fcc; box-sizing:border-box; background-color:#E6EDF1; border-radius:6px;">
+                            <input type="file" name="filename" id="upload" style="opacity:0; padding-left:20px;" onchange="ShowFilename()">
+                            <br>
+                            <label for="upload" style="width:300px; height:170px;"><p style="margin-top:55px;" id="fname">Choose a file</p></label>
+                        </div>
+                        <input type="submit" value="Upload" style="width:300px; height:35px; background-color:#338fcc; margin-top:4px; color:white; font-size:15px; border-radius:6px;" onclick="ShowDiv()">
                     </form>
                 </div>
             </div>
             <br>
             <div class="container text-center" style="display:flex; justify-content:center; align-items:center;">
                 <div class="spinner-border" id="spinDiv" style="display:none; width:20px; height:20px;"></div>
-                <h3 id="spinHeader" style="display:none; padding-left:12px;">Loading</h3>
+                <h3 id="spinHeader" style="display:none; padding-left:9px;">Loading</h3>
             </div>
         </div>
     </body>
