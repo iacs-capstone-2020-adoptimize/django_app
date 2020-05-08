@@ -18,6 +18,7 @@
                 processData: false,
                 success: function(data, textStatus, jqXHR) {
                     const key = data.key;
+                    $("#spinHeader").text("Loading");
                     pollForResult(key);
                 },
             });
