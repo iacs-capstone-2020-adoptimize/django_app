@@ -14,6 +14,7 @@
                 processData: false,
                 success: function(data, textStatus, jqXHR) {
                     const key = data.key;
+                    $("#spinHeader").text("Loading");
                     pollForResult(key);
                 },
             });
@@ -53,7 +54,7 @@
             <br>
             <div class="container text-center" style="display:flex; justify-content:center; align-items:center;">
                 <div class="spinner-border" id="spinDiv" style="display:none; width:20px; height:20px;"></div>
-                <h3 id="spinHeader" style="display:none; padding-left:12px;">Loading</h3>
+                <h3 id="spinHeader" style="display:none; padding-left:12px;">Sending</h3>
             </div>
         </div>
     </body>
