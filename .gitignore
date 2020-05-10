@@ -7,3 +7,4 @@ __pycache__
 frames/*
 *.jpg
 *.mp4
+*.h5

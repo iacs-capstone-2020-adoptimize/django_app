@@ -8,7 +8,7 @@
         };
         function submitForm() {
             $("#spinDiv").css("display", "");
-            $("#spinHeader").css("display", "");
+            $("#spinHeader").text("Uploading").css("display", "");
             var formData = new FormData($("#video_form")[0]);
             $.ajax({
                 url: "/apa/process",
@@ -29,6 +29,8 @@
                     if (data["success"] !== 1) {
                         setTimeout(function() {pollForResult(key)}, 3000);
                     } else{
+                        $("#spinDiv").css("display", "none");
+                        $("#spinHeader").text("").css("display", "none");
                         window.location = "/apa/result?key=" + key;
                     }
             });
@@ -61,7 +63,7 @@
             <br>
             <div class="container text-center" style="display:flex; justify-content:center; align-items:center;">
                 <div class="spinner-border" id="spinDiv" style="display:none; width:20px; height:20px;"></div>
-                <h3 id="spinHeader" style="display:none; padding-left:9px;">Loading</h3>
+                <h3 id="spinHeader" style="display:none; padding-left:9px;"></h3>
             </div>
         </div>
     </body>
